@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Create Ad" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Create Ad" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-1">
+
+    <!-- Message -->
+    <div
+      class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+    >{% translate "This action requires email verification. Verify your email in the settings."%}</div>
+
+    <!-- Settings link -->
+    <a
+      class="btn btn-primary mx-auto page-content-max-very-narrow text-break whitespace-preserve"
+      href="{% url 'accounts_settings' %}"
+      role="button"
+    >{% translate "Settings" context 'user settings link in "verified email required" page' %}</a>
+
+  </div>
+{% endblock %} <!-- End of content body -->

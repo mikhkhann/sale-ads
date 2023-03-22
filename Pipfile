@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "~=4.1"
+django-allauth = "~=0.51"
+pillow = "~=9.3"
+django-modeltranslation = "~=0.18"
+psycopg2-binary = "~=2.9"
+gunicorn = "~=20.1"
+environs = {version = "~=9.5", extras = ["django"]}
+boto3 = "~=1.26"
+django-storages = "~=1.13"
+django-anymail = {version = "==9.1", extras = ["mailgun"]}
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

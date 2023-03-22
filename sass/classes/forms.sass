@@ -1,0 +1,11 @@
+@use "bootstrap"
+
+@use "mixins"
+
+.form-error-list
+  @extend .alert
+  @extend .alert-danger
+  @include mixins.whitespace-preserve
+  margin: 0
+  overflow-wrap: break-word
+  padding-left: 2rem

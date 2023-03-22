@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% with provider=provider.name %}{% if process == "connect" %}{% blocktranslate context "web page title prefix" %}Connect {{ provider }}{% endblocktranslate %}{% else %}{% blocktranslate context "web page title prefix" %}Sign In Via {{ provider }}{% endblocktranslate %}{% endif %}{% endwith %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  {% with provider=provider.name %}
+    <div class="heading-page-top page-content-medium"
+    >{% if process == "connect" %}{% blocktranslate context "web page heading" %}Connect {{ provider }}{% endblocktranslate %}{% else %}{% blocktranslate context "web page heading" %}Sign In Via {{ provider }}{% endblocktranslate %}{% endif %}</div>
+  {% endwith %}
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-1">
+
+    <!-- Message -->
+    {% with provider=provider.name %}
+      <div
+        class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+      >{% if process == "connect" %}{% blocktranslate %}You are about to connect a new third party account from {{ provider }}.{% endblocktranslate %}{% else %}{% blocktranslate %}You are about to sign in using a third party account from {{ provider }}.{% endblocktranslate %}{% endif %}</div>
+    {% endwith %}
+
+    <!-- Button -->
+    <div class="mx-auto mw-max-content">
+      <form action="{{ request.get_full_path }}" method="post">
+        <button
+          class="btn btn-primary mx-auto page-content-max-very-narrow text-break whitespace-preserve"
+        >{% translate "Continue" context "login via third-party account confirmation button" %}</button>
+        {% csrf_token %}
+      </form>
+    </div>
+
+  </div>
+{% endblock %} <!-- End of content body -->

@@ -1,0 +1,26 @@
+@use "bootstrap"
+
+@use "mixins"
+@use "vars"
+
+.field
+  display: grid
+  gap: vars.$field-item-gap
+
+  > *
+    min-width: 0
+
+.field-label
+  @include mixins.whitespace-preserve
+  max-width: 100%
+  overflow-wrap: break-word
+
+.field-error
+  @extend .invalid-feedback
+  @include mixins.whitespace-preserve
+  display: block
+  margin: 0
+  overflow-wrap: break-word
+
+.gap-field-items
+  gap: vars.$field-item-gap !important

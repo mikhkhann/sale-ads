@@ -1,0 +1,40 @@
+{% if paginator.count %}
+  <div class="d-flex flex-wrap gap-1 justify-content-center">
+
+    <!-- First -->
+    {% if page_obj.number > one_side_neighboring_pages|add:1 %}
+
+      <!-- Link -->
+      {% include "ads/lists/_base/_neighboring_pages_links/_link.html" with number=1 %}
+
+      <!-- Separator -->
+      {% if page_obj.number != one_side_neighboring_pages|add:2 %}
+        {% include "ads/lists/_base/_neighboring_pages_links/_neighbors_and_edge_sep.html" %}
+      {% endif %}
+
+    {% endif %} <!-- End of first -->
+
+    <!-- Previous -->
+    {% include "ads/lists/_base/_neighboring_pages_links/_one_side_neighbors.html" with numbers=previous_pages %}
+
+    <!-- Self -->
+    {% include "ads/lists/_base/_neighboring_pages_links/_button.html" with number=page_obj.number to_itself=True only %}
+
+    <!-- Next -->
+    {% include "ads/lists/_base/_neighboring_pages_links/_one_side_neighbors.html" with numbers=next_pages %}
+
+    <!-- Last -->
+    {% if page_obj.number|add:one_side_neighboring_pages < paginator.num_pages %}
+
+      <!-- Separator -->
+      {% if  page_obj.number|add:one_side_neighboring_pages|add:1 < paginator.num_pages %}
+        {% include "ads/lists/_base/_neighboring_pages_links/_neighbors_and_edge_sep.html" %}
+      {% endif %}
+
+      <!-- Link -->
+      {% include "ads/lists/_base/_neighboring_pages_links/_link.html" with number=paginator.num_pages %}
+
+    {% endif %} <!-- End of last -->
+
+  </div>
+{% endif %}

@@ -1,0 +1,51 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "About" context "web page title prefix" %}{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="mt-3 mx-auto page-content-medium">
+
+    <div class="text-break whitespace-preserve"
+    >{% translate "Hi! My name is Misha." context '"about" page' %}</div>
+    <div class="text-break whitespace-preserve"
+    >{% translate "I'm a junior backend developer." context '"about" page' %}</div>
+    <div class="text-break whitespace-preserve"
+    >{% translate "I created this site to demonstrate my skills." context '"about" page' %}</div>
+    <div class="text-break whitespace-preserve"
+    >{% translate "More about me:" context '"about" page' %} <a href="https://mikhkhann.com">mikhkhann.com</a></div>
+    <div class="text-break whitespace-preserve"
+    >{% translate "The project's repo:" context '"about" page' %} <a href="https://github.com/mikhkhann/sale-ads">github.com/mikhkhann/sale-ads</a></div>
+
+    <h2 class="mt-2 text-break whitespace-preserve"
+    >{% translate "About the site" context '"about" page' %}</h2>
+    <div class="text-break whitespace-preserve"
+    >{% translate "This is a site for sale ads. The database filled with some dummy ads for demonstration purposes. The interface of the site is pretty intuitive, but here is the basic information just in case:" context '"about" page' %}</div>
+
+    <h4 class="mt-2 text-break whitespace-preserve"
+    >{% translate "Languages" context '"about" page' %}</h4>
+    <div class="text-break whitespace-preserve"
+    >{% translate "The site is available in English and Russian. The current language can be changed on the language update page. A user can get to the language update page via the globe link on the top bar." context '"about" page' %}</div>
+
+    <h4 class="mt-2 text-break whitespace-preserve"
+    >{% translate "Account" context '"about" page' %}</h4>
+    <div class="text-break whitespace-preserve"
+    >{% translate "Only a user with an account can create ads. To create an account a user can use their e-mail or Google account. An account is created and managed via the account menu (the element on the right edge of the top bar)." context '"about" page' %}</div>
+    <div class="text-break whitespace-preserve"
+    >{% translate "A user can verify their e-mail, but it is not necessary. The ability of the users without verified e-mail to create ads can be easily turned off via the site settings." context '"about" page' %}</div>
+
+    <h4 class="mt-2 text-break whitespace-preserve"
+    >{% translate "Ads" context '"about" page' %}</h4>
+    <div class="text-break whitespace-preserve"
+    >{% translate 'An ad can have one entry for each language of the site. An entry of an ad represents the name and description of the ad in one of the site languages. To create an add, click "Ads" in the account menu and then click "Create Ad" on the newly opened page.' context '"about" page' %}</div>
+
+    <h4 class="mt-2 text-break whitespace-preserve"
+    >{% translate "Categories" context '"about" page' %}</h4>
+    <div class="text-break whitespace-preserve"
+    >{% translate "Ad categories are taken from AliExpress." context '"about" page' %}</div>
+
+  </div>
+{% endblock %}

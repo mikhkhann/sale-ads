@@ -1,0 +1,1 @@
+docker exec -it -w /sale-ads/src sale-ads-dev-django django-admin test --settings sale_ads.conf.settings.test $@

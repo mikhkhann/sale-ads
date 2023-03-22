@@ -1,0 +1,149 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Edit Ad" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  {% with name=object.get_entry_in_current_language.name %}
+    <div class="heading-page-top page-content-medium"
+    >{% blocktranslate context "web page heading" %}Edit "{{ name }}" Ad{% endblocktranslate %}</div>
+  {% endwith %}
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-2">
+
+    <!-- Ad detail link-->
+    <a
+      class="mx-auto page-content-very-narrow text-break text-center whitespace-preserve"
+      href="{% url 'ads_detail' pk=object.pk %}"
+    >{% translate "Ad View" context "link in ad update page" %}</a>
+
+    <!-- Reverification message -->
+    <div
+      class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+    >{% translate "After an update of the entries or images of the ad, it must be verified by the admin again." %}</div>
+
+    <!-- Ad update block -->
+    <div class="d-grid gap-4">
+
+      <!-- Ad form -->
+      <div class="mx-auto page-content-narrow">
+        <form action="{{ request.get_full_path }}" method="post">
+          <div class="d-grid gap-1">
+
+            <!-- Errors -->
+            {% form_errors ad_form %}
+
+            <!-- Fields -->
+            <div class="d-grid gap-1">
+
+              <!-- Category field -->
+              {% translate "Category" context "ad update form field label" as category_field_label %}
+              {% select_field ad_form.category category_field_label %}
+
+              <!-- Price field -->
+              {% translate "Price" context "ad update form field label" as price_field_label %}
+              {% number_field ad_form.price price_field_label %}
+
+            </div> <!-- End of fields -->
+
+            <!-- Buttons -->
+            <div class="d-grid gap-1">
+
+              <!-- Save button -->
+              <button
+                class="btn btn-primary text-break whitespace-preserve"
+                name="action"
+                value="update"
+              >{% translate "Save" context "ad update form button" %}</button>
+
+              <!-- Remove button -->
+              <a
+                class="btn btn-danger text-break whitespace-preserve"
+                href="{% url 'ads_delete' pk=object.pk %}"
+                role="button"
+              >{% translate "Remove add" context "link in ad update form" %}</a>
+
+            </div> <!-- End of buttons -->
+
+          </div>
+          {% csrf_token %}
+          {% hidden_fields ad_form %}
+        </form>
+      </div> <!-- End of ad form -->
+
+      <!-- Entry block -->
+      <div>
+
+        <!-- Heading -->
+        <h2
+          class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+        >{% translate "Entries" context "ad update page subheading" %}</h2>
+
+        <!-- Form -->
+        <div class="mx-auto page-content-narrow">
+          <form action="{{ request.get_full_path }}" method="post">
+            <div class="d-grid gap-1">
+
+              <!-- Errors -->
+              {% form_errors entry_choice_form %}
+
+              <!-- Field -->
+              {% translate "Choose language to add/edit ad entry:" context "ad update entry choice field label" as entry_field_label %}
+              {% radio_list_field entry_choice_form.language entry_field_label required_mark=False %}
+
+              <!-- Buttons -->
+              <div class="d-grid gap-1" style="grid-template-columns: 1fr 1fr">
+
+                <!-- Creation or update button -->
+                <button
+                  class="btn btn-primary text-break whitespace-preserve"
+                  name="action"
+                  value="create_or_update_entry"
+                >{% translate "Add or Edit" context "ad entry update link in ad update page" %}</button>
+
+                <!-- Deletion button -->
+                <button
+                  class="btn btn-danger text-break whitespace-preserve"
+                  name="action"
+                  value="delete_entry"
+                >{% translate "Remove" context "ad update page ad entry deletion button" %}</button>
+
+              </div> <!-- End of buttons -->
+
+            </div>
+            {% csrf_token %}
+            {% hidden_fields entry_choice_form %}
+          </form>
+        </div> <!-- End of form -->
+
+      </div> <!-- End of entry block -->
+
+      <!-- Image block -->
+      <div>
+
+        <!-- Heading -->
+        <h2
+          class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+        >{% translate "Images" context "ad update page subheading" %}</h2>
+
+        <!-- Link -->
+        <a
+          class="btn btn-primary d-block mx-auto page-content-narrow text-break whitespace-preserve"
+          href="{% url 'ads_update_images' pk=object.pk %}"
+          role="button"
+        >{% translate "Edit" context "image update link in ad update page" %}</a>
+
+      </div> <!-- End of image block -->
+
+    </div> <!-- End of ad update block -->
+
+  </div>
+{% endblock %} <!-- End of content body -->

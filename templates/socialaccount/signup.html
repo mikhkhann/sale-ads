@@ -1,0 +1,51 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Sign Up" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Sign Up" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-1">
+
+    <!-- Message -->
+    {% with provider_name=account.get_provider.name %}
+      <div
+        class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+      >{% blocktranslate %}You are about to use your {{provider_name}} account to login. As a final step, please complete the following form:{% endblocktranslate %}</div>
+    {% endwith %}
+
+    <!-- Form -->
+    <div class="mx-auto page-content-very-narrow">
+      <form action="{% url 'socialaccount_signup' %}" method="post">
+        <div class="d-grid gap-1">
+
+          <!-- Errors -->
+          {% form_errors form %}
+
+          <!-- Email field -->
+          {% translate "E-mail" context "third-party account signup form email field label" as email_field_label %}
+          {% email_field form.email email_field_label autocomplete="email" %}
+
+          <!-- Button -->
+          <button class="btn btn-primary text-break whitespace-preserve"
+          >{% translate "Sign Up" context "third-party account signup form button" %}</button>
+
+        </div>
+        {% csrf_token %}
+        {% hidden_fields form %}
+        <input name="next" type="hidden" value="{{ home_url }}">
+      </form>
+    </div> <!-- End of form -->
+
+  </div>
+{% endblock %} <!-- End of content body -->

@@ -1,0 +1,35 @@
+@use "bootstrap"
+
+$_top-bar-account-menu-width: 12rem
+
+.top-bar-text
+  @extend .text-truncate
+  padding: 0.5rem 1rem
+
+.top-bar-link
+  @extend .top-bar-text
+  color: black
+  display: block
+  text-decoration: none
+
+  &:hover
+    background-color: #f3bde2
+    color: black
+
+.top-bar-account-menu
+  max-width: 40%
+  min-width: $_top-bar-account-menu-width
+
+  &:hover .top-bar-account-menu-body
+    display: block
+
+.top-bar-account-menu-body
+  display: none
+  width: $_top-bar-account-menu-width
+
+.top-bar-account-menu-item
+  @extend .top-bar-link
+  background-color: inherit
+  border: none
+  text-align: center
+  width: 100%

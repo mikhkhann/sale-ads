@@ -1,0 +1,28 @@
+#!/usr/bin/env python3.11
+
+import os
+from pathlib import Path
+
+from django.core.management import call_command
+
+base_dir = Path(__file__).parents[1]
+os.chdir(base_dir)
+call_command("makemessages", "-a", "-v", "0")
+for path in (base_dir / "locale").rglob("*.po"):
+    first_fuzzy = True
+    with open(path) as file:
+        lines = file.readlines()
+        for index, line in enumerate(lines):
+            if (
+                line == 'msgstr ""\n'
+                and index < len(lines) - 1
+                and lines[index + 1] == "\n"
+            ):
+                print(f"{path.relative_to(base_dir)}:{index + 1}: untranslated")
+            if line.startswith("#, ") and "fuzzy" in line[3:].strip().split(", "):
+                if first_fuzzy:
+                    first_fuzzy = False
+                else:
+                    print(f"{path.relative_to(base_dir)}:{index + 1}: fuzzy")
+            if line.startswith("#~ msgid"):
+                print(f"{path.relative_to(base_dir)}:{index + 1}: unneeded")

@@ -1,0 +1,25 @@
+{% load i18n %}
+
+{% for category in siblings %}
+
+  <!-- Node -->
+  <details class="{% if root and forloop.first %}mt-0{% else %}mt-1{% endif %}">
+
+    <!-- Name -->
+    <summary class="small {% if not category.children %}d-block{% endif %}">
+      {% with ad_count=category.ad_count category_name=category.name %}
+        <a
+          class="link-text text-break whitespace-preserve"
+          href="{{ category.url }}"
+        >{% blocktranslate context "ad list category tree node" %}{{ category_name }}&nbsp;({{ ad_count }}){% endblocktranslate %}</a>
+      {% endwith %}
+    </summary>
+
+    <!-- Children -->
+    <div class="ms-2">
+      {% include "ads/lists/_base/_category_tree.html" with root=False siblings=category.children %}
+    </div>
+
+  </details> <!-- End of node -->
+
+{% endfor %}

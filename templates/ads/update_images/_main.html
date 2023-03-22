@@ -1,0 +1,128 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Update Ad Images" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  {% with name=object.get_entry_in_current_language.name %}
+    <div class="heading-page-top page-content-medium"
+    >{% blocktranslate context "web page heading" %}Update Images of "{{ name }}" Ad{% endblocktranslate %}</div>
+  {% endwith %}
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-2">
+
+    <!-- Ad editing link -->
+    <a
+      class="mx-auto page-content-very-narrow text-break text-center whitespace-preserve"
+      href="{% url 'ads_update' pk=object.pk %}"
+    >{% translate "Ad Editing" context "link in ad's images update page" %}</a>
+
+    <!-- Image update block -->
+    <div class="d-grid gap-3">
+
+      <!-- Editing block -->
+      <div class="d-grid gap-2 mx-auto w-max-content">
+        {% for image in object.ordered_images %}
+
+          <!-- Single image editing block -->
+          <div
+            class="background-soft d-grid gap-1 grid-auto-flow-column p-2 w-max-content"
+          >
+
+            <!-- Image -->
+            <div class="ad-image-editing-image-wrapper align-self-center">
+              <img
+                class="ad-image-editing-image d-block mx-auto mw-100"
+                src="{{ image.image.url }}"
+              >
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-grid gap-1 h-max-content">
+
+              <!-- Lifting button -->
+              {% include "ads/update_images/editing_buttons/_order.html" with direction="up" label="⇑" %}
+
+              <!-- Lowering button -->
+              {% include "ads/update_images/editing_buttons/_order.html" with direction="down" label="⇓" %}
+
+              <!-- Deletion button -->
+              <div>
+                <form action="{{ request.get_full_path }}" method="post">
+                  {% translate "Remove" context "ad image deletion button" as deletion_button_label %}
+                  {% include "ads/update_images/editing_buttons/_base.html" with label=deletion_button_label name="number" value=image.number %}
+                  {% csrf_token %}
+                  <input name="action" type="hidden" value="delete">
+                </form>
+              </div>
+
+            </div> <!-- End of buttons -->
+
+          </div> <!-- End of single image editing block -->
+
+        {% endfor %}
+      </div> <!-- End of editing block -->
+
+      <!-- Addition block -->
+      {% if addition_formset.total_form_count %}
+        <div>
+
+          <!-- Heading -->
+          <h2
+            class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+          >{% translate "Add" context "ad's images update page subheading" %}</h2>
+
+          <!-- Formset -->
+          <div class="mx-auto page-content-very-narrow">
+            <form
+              action="{{ request.get_full_path }}"
+              enctype="multipart/form-data"
+              method="post"
+            >
+              <div class="d-grid gap-1">
+
+                <!-- Errors -->
+                {% form_errors form_errors=addition_formset.non_form_errors error_list_extra_class="min-width-0" %}
+
+                <!-- Forms -->
+                <div class="d-grid gap-1">
+                  {% for form in addition_formset %}
+
+                    <!-- Form -->
+                    <div>
+                      {% file_field form.image accept="image/*" %}
+                      {% hidden_fields form %}
+                    </div>
+
+                  {% endfor %}
+                </div> <!-- End of forms-->
+
+                <!-- Button -->
+                <button
+                  class="btn btn-primary text-break w-100 whitespace-preserve"
+                  name="action"
+                  type="submit"
+                  value="add"
+                >{% translate "Save" context "ad's images update button" %}</button>
+
+              </div>
+              {% csrf_token %}
+              {{ addition_formset.management_form }}
+            </form>
+          </div> <!-- End of formset -->
+
+        </div>
+      {% endif %} <!-- End of addition block -->
+
+    </div> <!-- End of image update block -->
+
+  </div>
+{% endblock %} <!-- End of content body -->

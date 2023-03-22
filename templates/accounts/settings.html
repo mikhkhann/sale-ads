@@ -1,0 +1,141 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Settings" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Settings" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+
+  <!-- Form -->
+  <div class="mx-auto page-content-very-narrow">
+    <form action="{{ request.get_full_path }}" method="post">
+      <div class="d-grid gap-1">
+
+        <!-- Errors -->
+        {% form_errors form %}
+
+        <!-- Fields -->
+        <div>
+
+          <!-- Name field -->
+          {% translate "Name" context "user settings form field label" as name_field_label %}
+          {% text_field form.name name_field_label %}
+
+          <!-- Username field -->
+          <div>
+
+            <!-- Field -->
+            {% translate "Username" context "user settings form field label" as username_field_label %}
+            {% text_field form.username username_field_label %}
+
+            <!-- Hint -->
+            <div class="form-text text-break">
+
+              {% with min_length=min_username_length max_length=max_username_length %}
+                <span class="whitespace-preserve"
+                >{% blocktranslate context "username info in user settings form" %}a-z, 0-9, and _. {{ min_length }}-{{ max_length }} characters.{% endblocktranslate %}</span><br>
+              {% endwith %}
+
+              <span class="whitespace-preserve"
+              >{% translate "Your ad list address:" context "username info in user settings form" %}</span><br>
+
+              <a
+                class="text-break text-decoration-none whitespace-preserve"
+                href="{% url 'ads_user_list' username=object.username %}"
+              >{{ domain }}{{ user_ad_list_url_path }}</a>
+
+            </div> <!-- End of hint -->
+
+          </div> <!-- End of username field -->
+
+          <!-- Email block -->
+          <div>
+
+            <!-- Field & verification button -->
+            <div class="d-grid gap-field-items">
+
+              <!-- Label -->
+              {% translate "E-mail" context "user settings form field label" as email_field_label %}
+              {% field_label email_field_label form.email label_extra_class="min-width-0" %}
+
+              <!-- Widget & verification button -->
+              <div class="d-flex gap-1">
+
+                <!-- Widget -->
+                {% email_widget form.email widget_extra_class="flex-grow-1" %}
+
+                <!-- Verification button -->
+                <button
+                  class="btn btn-outline-primary text-nowrap"
+                  name="action"
+                  value="send_email_verification"
+                  {% if email_verified %}disabled{% endif %}
+                >{% if email_verified %}{% translate "Verified" context "user settings form email field button" %}{% else %}{% translate "Send Verification" context "user settings form email field button" %}{% endif %}</button>
+
+              </div> <!-- End of widget & verification button -->
+
+              <!-- Errors -->
+              {% field_errors form.email %}
+
+            </div> <!-- End of field & verification button -->
+
+            <!-- "Verification sent" message -->
+            {% if verification_sent %}
+              <div class="text-break whitespace-preserve"
+              >{% translate "Verification sent" context "email verification email sent" %}</div>
+            {% endif %}
+
+          </div> <!-- End of email block -->
+
+        </div> <!-- End of fields -->
+
+        <!-- Buttons & links -->
+        <div class="d-grid gap-1">
+
+          <!-- Submission button -->
+          <button
+            class="btn btn-primary text-break w-100 whitespace-preserve"
+            name="action"
+            value="save"
+          >{% translate "Save" context "user settings form button" %}</button>
+
+          <!-- Photo update link -->
+          <a
+            class="btn btn-outline-primary text-break w-100 whitespace-preserve"
+            href="{% url 'accounts_update_photo' %}"
+            role="button"
+          >{% translate "Change Photo" context "link in user settings" %}</a>
+
+          <!-- "Third-party accounts" link -->
+          <a
+            class="btn btn-outline-primary text-break w-100 whitespace-preserve"
+            href="{% url 'socialaccount_connections' %}"
+            role="button"
+          >{% translate "Third Party Accounts" context "link in user settings" %}</a>
+
+          <!-- Password update link -->
+          <a
+            class="btn btn-outline-primary text-break w-100 whitespace-preserve"
+            href="{% url 'account_change_password' %}"
+            role="button"
+          >{% translate "Change password" context "link in user settings" %}</a>
+
+        </div> <!-- End of buttons & links -->
+
+      </div>
+      {% csrf_token %}
+      {% hidden_fields form %}
+    </form>
+  </div> <!-- End of form -->
+
+{% endblock %} <!-- End of content body -->

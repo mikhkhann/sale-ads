@@ -1,0 +1,234 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% load htmlforms %}
+
+<!-- Title -->
+{% block title %}{% block title_prefix %}{% endblock %} - {% blocktranslate context "ad list page title suffix" %}{{ ad_count }} Found{% endblocktranslate %}{% endblock %}
+
+<!-- Content -->
+{% block content %}
+  <div>
+
+    <!-- Sub top bar -->
+    {% block sub_top_bar %}{% endblock %}
+
+    <!-- Content body -->
+    <div
+      class="align-items-start d-grid gap-3 mb-2 mt-3 mx-3"
+      style="grid-template-columns: 3fr 10fr 4fr"
+    >
+
+      <!-- Category tree -->
+      <div>
+        {% include "ads/lists/_base/_category_tree.html" with root=True siblings=category_tree only %}
+      </div>
+
+      <!-- List block -->
+      <div class="d-grid gap-2">
+
+        <!-- Head -->
+        {% block list_head %}{% endblock %}
+
+        <!-- Count & neighboring pages links -->
+        <div class="d-grid gap-1">
+
+          <!-- Count -->
+          <div class="text-break whitespace-preserve"
+          >{% blocktranslate context "ad list count" %}Ads found: {{ ad_count }}{% endblocktranslate %}</div>
+
+          <!-- Neighboring pages links -->
+          {% include "ads/lists/_base/_neighboring_pages_links.html" %}
+
+        </div> <!-- End of count & neighboring pages links -->
+
+        <!-- List -->
+        <div class="d-grid gap-2">
+          {% translate "Category:" context "ad list ad field label" as category_field_label %}
+          {% translate "Seller:" context "ad list single ad field label" as seller_field_label %}
+          {% for object in page_obj %}
+
+            <!-- Ad -->
+            <div class="background-soft min-width-0 pb-2 pt-1 px-3">
+
+              <!-- Name -->
+              <a
+                class="link-text text-break fs-2 fw-bold whitespace-preserve"
+                href="{{ object.get_absolute_url }}"
+              >{{ object.get_entry_in_current_language.name }}</a>
+
+              <!-- Images -->
+              {% if object.images.exists %}
+                <div class="overflow-x-auto">
+                  <div
+                    class="align-items-center d-grid gap-1 grid-auto-flow-column w-max-content "
+                  >
+                    {% for image in object.ordered_images %}
+
+                      <!-- Image -->
+                      <img
+                        style="max-height: 8rem; max-width: 8rem;"
+                        src="{{ image.image.url }}"
+                      >
+
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %} <!-- End of images -->
+
+              <!-- Info & price -->
+              <div class="d-flex gap-1">
+
+                <!-- Info -->
+                <div class="flex-grow-1">
+
+                  <!-- Category field -->
+                  <div
+                    class="d-grid gap-1 grid-auto-flow-column mw-max-content"
+                  >
+
+                    <!-- Label -->
+                    {% field_label category_field_label label_extra_class="min-width-0" required_mark=False %}
+
+                    <!-- Value -->
+                    <a
+                      class="text-break whitespace-preserve"
+                      href="{{ object.category.get_absolute_url }}"
+                    >{{ object.category }}</a>
+
+                  </div> <!-- End of category field -->
+
+                  <!-- Author field -->
+                  <div
+                    class="d-grid gap-1 grid-auto-flow-column mw-max-content"
+                  >
+
+                    <!-- Label -->
+                    {% field_label seller_field_label label_extra_class="min-width-0" required_mark=False %}
+
+                    <!-- Value -->
+                    <a
+                      class="text-break whitespace-preserve"
+                      href="{{ object.author.get_absolute_url }}"
+                    >{{ object.author }}</a>
+
+                  </div> <!-- End of author field -->
+
+                  <!-- Date -->
+                  <div class="text-break whitespace-preserve"
+                  >{{ object.created|date }}</div>
+
+                </div> <!-- End of info -->
+
+                <!-- Price -->
+                <div class="d-flex flex-column-reverse">
+                  <div class="fs-2 text-nowrap">${{ object.price }}</div>
+                </div>
+
+              </div> <!-- End of info & price -->
+
+            </div> <!-- End of ad -->
+
+          {% endfor %}
+        </div> <!-- End of list -->
+
+        <!-- Neighboring pages links -->
+        {% include "ads/lists/_base/_neighboring_pages_links.html" %}
+
+      </div> <!-- End of list block -->
+
+      <!-- Query form -->
+      <div>
+        <form action="{{ request.get_full_path }}" method="get">
+          <div class="d-grid gap-1">
+
+
+
+            <!-- Errors -->
+            {% form_errors query_form %}
+
+            <!-- Fields -->
+            <div class="d-grid gap-1">
+
+              <!-- Search block -->
+              <div class="d-grid grid-auto-flow-column gap-1">
+
+                <!-- Field -->
+                {% search_field query_form.search placeholder=search_field_placeholder %}
+
+                <!-- Button -->
+                <button class="btn btn-primary">
+                  <image
+                    src="{% static 'images/icons/magnifier.svg' %}"
+                    style="height: 1.2rem"
+                  >
+                </button>
+
+              </div> <!-- End of search block -->
+
+              <!-- "Search fields" field -->
+              {% translate "Search in" context "ad query form field label" as search_fields_field_label %}
+              {% checkbox_list_field query_form.search_fields search_fields_field_label %}
+
+              <!-- Order field -->
+              {% translate "Order" context "ad query form field label" as order_field_label %}
+              {% select_field query_form.order order_field_label %}
+
+              <!-- Price fields -->
+              <div class="d-grid gap-1 grid-auto-flow-column">
+
+                <!-- Min price field -->
+                {% translate "Min price ($)" context "ad query form field label" as min_price_field_label %}
+                {% number_field query_form.min_price min_price_field_label %}
+
+                <!-- Max price field -->
+                {% translate "Max price ($)" context "ad query form field label" as max_price_field_label %}
+                {% number_field query_form.max_price max_price_field_label %}
+
+              </div> <!-- End of price fields -->
+
+              <!-- Language field -->
+              {% translate "Languages" context "ad query form field label" as language_field_label %}
+              {% checkbox_list_field query_form.languages language_field_label %}
+
+              <!-- Category field -->
+              <div class="d-grid gap-1">
+
+                <!-- Label & field -->
+                <div class="d-grid gap-field-items">
+
+                  <!-- Label -->
+                  {% translate "Categories" context "ad query form field label" as category_field_label %}
+                  {% field_label category_field_label query_form.categories label_extra_class="min-width-0" %}
+
+                  <!-- Field -->
+                  <div class="card overflow-y-auto" style="height: 20rem">
+                    <div class="card-body ps-2 py-1">
+                      {% checkbox_list_field query_form.categories %}
+                    </div>
+                  </div>
+
+                </div> <!-- End of label & field -->
+
+                <!-- Errors -->
+                {% field_errors query_form.categories %}
+
+              </div> <!-- End of category field -->
+
+              <!-- Page size field -->
+              {% translate "Ads per page" context "ad query form field label" as page_size_field_label %}
+              {% radio_list_field query_form.page_size page_size_field_label %}
+
+            </div> <!-- End of fields -->
+
+          </div>
+          {% hidden_fields query_form %}
+        </form>
+      </div> <!-- End of query form -->
+
+    </div> <!-- End of content body -->
+
+  </div>
+{% endblock %} <!-- End of content -->

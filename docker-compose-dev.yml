@@ -1,0 +1,26 @@
+name: sale-ads-dev
+
+services:
+  django:
+    build: .
+    command: django-admin runserver 0.0.0.0:8000
+    container_name: sale-ads-dev-django
+    depends_on:
+      - db
+    environment:
+      DJANGO_SETTINGS_MODULE: sale_ads.conf.settings.dev
+      PYTHONPATH: /sale-ads/src
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/sale-ads
+    working_dir: /sale-ads
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:

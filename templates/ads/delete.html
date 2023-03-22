@@ -1,0 +1,35 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Remove Ad" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Remove Ad" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-1">
+
+    <!-- Message -->
+    {% with name=object.get_entry_in_current_language.name %}
+      <div
+        class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+      >{% blocktranslate %}Are you sure you want to remove the "{{ name }}" ad?{% endblocktranslate %}</div>
+    {% endwith %}
+
+    <!-- Button -->
+    <div class="mx-auto page-content-max-very-narrow">
+      <form action="{{ request.get_full_path }}" method="post">
+        <button class="btn btn-primary text-break whitespace-preserve"
+        >{% translate "Yes" context "ad removal confirmation button" %}</button>
+        {% csrf_token %}
+      </form>
+    </div>
+
+  </div>
+{% endblock %} <!-- End of deletion body -->

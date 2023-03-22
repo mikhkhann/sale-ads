@@ -1,0 +1,106 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Create Ad" context "web page title prefix" %}{% endblock %}
+
+<!-- Content headinig -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Create Ad" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div>
+
+    <!-- Verification info -->
+    <div
+      class="mx-auto page-content-medium small text-break text-muted whitespace-preserve"
+    >{% translate "The ad will appear in the main ad list after it is verified by the admin." %}</div>
+    <!-- Form -->
+    <div class="mx-auto page-content-medium">
+      <form
+        action="{{ request.get_full_path }}"
+        enctype="multipart/form-data"
+        method="post"
+      >
+        <div class="d-grid gap-1">
+
+          <!-- Errors -->
+          {% form_errors form_errors=ad_form.non_field_errors|add:entry_form.non_field_errors %}
+
+          <!-- Fields -->
+          <div class="d-grid gap-1">
+
+            <!-- Category field -->
+            {% translate "Category" context "ad creation form field label" as category_field_label %}
+            {% select_field ad_form.category category_field_label %}
+
+            <!-- Language field -->
+            <div>
+
+              <!-- Field -->
+              {% translate "Language" context "ad creation form field label" as language_field_label %}
+              {% select_field entry_form.language language_field_label %}
+
+              <!-- Hint -->
+              <div class="form-text text-break whitespace-preserve"
+              >{% translate "Choose the language of the name and description of the ad. Once the ad is created, you'll be able to create entries of the ad in other languages." %}</div>
+
+            </div> <!-- End of language field -->
+
+            <!-- Name field -->
+            {% translate "Name" context "ad creation form field label" as name_field_label %}
+            {% text_field entry_form.name name_field_label %}
+
+            <!-- Description field -->
+            {% translate "Description" context "ad creation form field label" as description_field_label %}
+            {% textarea_field entry_form.description description_field_label rows=10 %}
+
+            <!-- Price field -->
+            {% translate "Price ($)" context "ad creation form field label" as price_field_label %}
+            {% number_field ad_form.price price_field_label %}
+
+            <!-- Image formset -->
+            <div>
+              <div class="d-grid gap-1">
+
+                <!-- Errors -->
+                {% form_errors form_errors=image_formset.non_form_errors %}
+
+                <!-- Forms -->
+                <div class="d-grid gap-1">
+                  {% for form in image_formset %}
+
+                    <!-- Form -->
+                    <div>
+                      {% file_field form.image accept="image/*" %}
+                      {% hidden_fields form %}
+                    </div>
+
+                  {% endfor %}
+                </div> <!-- End of forms -->
+
+              </div>
+              {{ image_formset.management_form }}
+            </div> <!-- End of image formset -->
+
+          </div> <!-- End of fields -->
+
+          <!-- Button -->
+          <button class="btn btn-primary text-break whitespace-preserve"
+          >{% translate "Create" context "ad creation form button" %}</button>
+
+        </div>
+        {% csrf_token %}
+        {% hidden_fields ad_form %}
+        {% hidden_fields entry_form %}
+      </form>
+    </div> <!-- End of form -->
+
+  </div>
+{% endblock %} <!-- End of content body -->

@@ -1,0 +1,93 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load not from utils %}
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Third Party Accounts" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Third Party Accounts" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-4">
+
+    <!-- Revision block with existing accounts -->
+    {% if form.accounts %}
+      <div class="mx-auto page-content-very-narrow">
+        <form action="{% url 'socialaccount_connections' %}" method="post">
+          <div class="d-grid gap-1">
+
+            <!-- Errors -->
+            {% form_errors form %}
+
+            <!-- Message & field -->
+            <div class="d-grid gap-field-items">
+
+              <!-- Message -->
+              <div class="text-break whitespace-preserve"
+              >{% translate "You can sign in to your account using any of the following third party accounts:" %}</div>
+
+              <!-- Field -->
+              <div class="flag-widget-list">
+                {% for base_account in form.accounts %}
+                  {% with account=base_account.get_provider_account %}
+                  {% with name=account|escape %}
+                  {% with choice_value=base_account.id|escape %}
+                  {% with choice_label=account.get_brand.name|add:" "|add:name %}
+
+                    <!-- Radio widget -->
+                    {% labeled_radio_widget "account" choice_value choice_label field=form.account valid=form.errors|not %}
+
+                  {% endwith %}{% endwith %}{% endwith %}{% endwith %}
+                {% endfor %}
+              </div> <!-- End of field -->
+
+            </div> <!-- End of message & field -->
+
+            <!-- Deletion button -->
+            <button class="btn btn-primary text-break whitespace-preserve"
+            >{% translate "Remove" context "third-party accounts form button" %}</button>
+
+          </div>
+          {% csrf_token %}
+          {% hidden_fields form %}
+        </form>
+      </div> <!-- Revision block with existing accounts -->
+
+    <!-- Revision block without existing accounts -->
+    {% else %}
+
+      <!-- Message -->
+      <div
+        class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+      >{% translate "You currently have no third part accounts connected to this account." %}</div>
+
+    {% endif %} <!-- End of revision block without existing accounts -->
+
+    <!-- Addition block-->
+    <div>
+
+      <!-- Heading -->
+      <h2
+        class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+      >{% translate "Add a Third Party Account" context "third-party accounts page subheading" %}</h2>
+
+      <!-- List -->
+      <div class="mx-auto page-content-max-very-narrow">
+        <ul class="mx-auto mw-100 text-break w-max-content">
+          {% include "socialaccount/snippets/provider_list.html" with process="connect" %}
+        </ul>
+      </div>
+
+    </div> <!-- End of addition block -->
+
+  </div>
+  {% include "socialaccount/snippets/login_extra.html" %}
+{% endblock %} <!-- End of content body -->

@@ -1,0 +1,12 @@
+@use "bootstrap"
+
+@use "mixins"
+
+.heading-page-top
+  @extend .h1
+  @include mixins.whitespace-preserve
+  margin:
+    left: auto
+    right: auto
+  overflow-wrap: break-word
+  text-align: center

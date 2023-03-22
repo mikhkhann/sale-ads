@@ -1,0 +1,55 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "E-mail Address Confirmation" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "E-mail Address Confirmation" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+
+  <!-- Content body for valid confirmation link -->
+  {% if confirmation %}
+    <div class="d-grid gap-1">
+
+      <!-- Message -->
+      {% with email=confirmation.email_address.email user=confirmation.email_address.user %}
+        <div
+          class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+        >{% blocktranslate %}Please confirm that {{ email }} is an e-mail address for user {{ user }}.{% endblocktranslate %}</div>
+      {% endwith %}
+
+      <!-- Button -->
+      <form
+        action="{% url 'account_confirm_email' confirmation.key %}"
+        method="post"
+      >
+        <button
+          class="btn btn-primary mx-auto page-content-max-very-narrow text-break whitespace-preserve"
+        >{% translate "Confirm" context "email confirmation button" %}</button>
+        {% csrf_token %}
+      </form>
+
+    </div> <!-- End of content body for valid confirmation link -->
+
+  <!-- Content body for invalid confirmation link -->
+  {% else %}
+
+    <!-- Message -->
+    {% url "accounts_settings" as accounts_settings_url %}
+    {% with link_start_tag='<a class="text-break whitespace-preserve" href="'|add:accounts_settings_url|add:'">'|safe %}
+    {% with link_end_tag="</a>"|safe %}
+      <div
+        class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+      >{% blocktranslate %}This email confirmation link expired or is invalid. Please {{ link_start_tag }}issue a new e-mail confirmation request{{ link_end_tag }}.{% endblocktranslate %}</div>
+    {% endwith %}{% endwith %}
+
+  {% endif %} <!-- End of content body for invalid confirmation link -->
+
+{% endblock %} <!-- End of content body -->

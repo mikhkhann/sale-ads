@@ -1,0 +1,3 @@
+bootstrap_path=$(<sass-bootstrap-path)
+cd ..
+sass -I sass -I $bootstrap_path --no-source-map sass/style.sass static/css/style.css

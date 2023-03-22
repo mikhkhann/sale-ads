@@ -1,0 +1,140 @@
+{% load i18n %}
+{% load static %}
+
+{% load socialaccount %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+  <title
+  >{% block title %}{% block title_prefix %}{% endblock %} - {% translate "Sale Ads" context "web page title suffix" %}{% endblock %}</title>
+
+</head>
+
+<body>
+
+  <!-- Top bar -->
+  <div class="background-color-primary d-flex shadow">
+
+    <!-- Left part -->
+    <div class="flex-grow-1">
+
+      <!-- Links -->
+      <div class="d-grid grid-auto-flow-column mw-max-content">
+
+        <!-- Home link -->
+        <a
+          class="top-bar-link whitespace-preserve"
+          href="{{ home_url }}"
+        >{% translate "Ads" context "top bar ad list link" %}</a>
+
+        <!-- "About" link -->
+        <a
+          class="top-bar-link whitespace-preserve"
+          href="{% url 'pages_about' %}"
+        >{% translate "About" context "top bar link" %}</a>
+
+      </div> <!-- End of links -->
+
+    </div> <!-- End of left part -->
+
+    <!-- Language setting link -->
+    <div>
+      {% get_current_language as language %}
+      <a
+        class="d-grid gap-1 grid-auto-flow-column top-bar-link"
+        href="{% url 'languages_setting' %}?next={{ request.get_full_path|urlencode }}"
+      >
+        <img src="{% static 'images/icons/globe.svg' %}" style="height: 1.5rem">
+        <div class="whitespace-preserve"
+        >{{ language|language_name_local }}</div>
+      </a>
+    </div>
+
+    <!-- Account menu -->
+    <div class="d-block position-relative top-bar-account-menu">
+
+      <!-- Heading -->
+      <div class="text-center text-truncate top-bar-text"
+      >{% if user.is_authenticated %}{{ user }}{% else %}{% translate "You're not signed in" context "top bar account menu heading" %}{% endif %}</div>
+
+      <!-- Body -->
+      <div
+        class="background-color-secondary end-0 position-absolute shadow top-bar-account-menu-body"
+      >
+
+        <!-- Body for authenticated user -->
+        {% if user.is_authenticated %}
+
+          <!-- Ad list link -->
+          <a
+            class="top-bar-account-menu-item whitespace-preserve"
+            href="{% url 'ads_user_list' username=user.username %}"
+          >{% translate "Ads" context "top bar account menu item" %}</a>
+
+          <!-- Settings link -->
+          <a
+            class="top-bar-account-menu-item whitespace-preserve"
+            href="{% url 'accounts_settings' %}"
+          >{% translate "Settings" context "top bar account menu item" %}</a>
+
+          <!-- Logout link -->
+          <form action="{% url 'account_logout' %}" method="post">
+            <button class="top-bar-account-menu-item whitespace-preserve"
+            >{% translate "Sign Out" context "top bar account menu item" %}</button>
+            {% csrf_token %}
+            <input
+              name="next" type="hidden" value="{{ request.get_full_path }}"
+            >
+          </form>
+
+        <!-- Body for anonymous user -->
+        {% else %}
+
+          <!-- Signin link -->
+          <a
+            class="top-bar-account-menu-item whitespace-preserve"
+            href="{% url 'account_login' %}?next={{ request.get_full_path|urlencode }}"
+          >{% translate "Sign In" context "top bar account menu item" %}</a>
+
+          <!-- Google signin/signup link -->
+          <a
+            class="top-bar-account-menu-item whitespace-preserve"
+            href="{% provider_login_url 'google' next=request.get_full_path %}"
+          >{% translate "Via Google" context "top bar account menu item" %}</a>
+
+          <!-- Signup link -->
+          <a
+            class="top-bar-account-menu-item whitespace-preserve"
+            href="{% url 'account_signup' %}?next={{ request.get_full_path|urlencode }}"
+          >{% translate "Sign Up" context "top bar account menu item" %}</a>
+
+        {% endif %} <!-- End of body for anonymous user -->
+
+      </div> <!-- End of body -->
+
+    </div> <!-- End of account menu -->
+
+  </div> <!-- End of top bar -->
+
+  <!-- Content -->
+  {% block content %}
+    <div class="d-grid gap-2 my-3">
+
+      <!-- Heading -->
+      {% block content_heading %}{% endblock %}
+
+      <!-- Body -->
+      {% block content_body %}{% endblock %}
+
+    </div>
+  {% endblock %} <!-- End of content -->
+
+</body>
+
+</html>

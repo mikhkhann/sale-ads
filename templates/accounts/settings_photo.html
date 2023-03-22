@@ -1,0 +1,52 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+{% load bool from utils %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% if user.photo %}{% translate "Change Photo" context "web page title prefix" %}{% else %}{% translate "Set Photo" context "web page title prefix" %}{% endif %}{% endblock %}
+
+<!-- Content heading-->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% if user.photo %}{% translate "Change Photo" context "web page heading" %}{% else %}{% translate "Set Photo" context "web page heading" %}{% endif %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-2 mx-auto page-content-very-narrow">
+
+    <!-- Photo -->
+    {% if user.photo %}
+      <img class="mx-auto mw-100" src="{{ user.photo.url }}">
+    {% endif %}
+
+    <!-- Form -->
+    <div>
+      <form
+        action="{{ request.get_full_path }}"
+        enctype="multipart/form-data"
+        method="post"
+      >
+        <div class="d-grid gap-1">
+
+          <!-- Errors -->
+          {% form_errors form %}
+
+          <!-- Field -->
+          {% file_field form.photo accept="image/*" clearable_file=True clear_file=user.photo|bool %}
+
+          <!-- Button -->
+          <button class="btn btn-primary text-break w-100 whitespace-preserve"
+          >{% translate "Save" context "user photo form button" %}</button>
+
+        </div>
+        {% csrf_token %}
+        {% hidden_fields form %}
+      </form>
+    </div> <!-- End of form -->
+
+  </div>
+{% endblock %} <!-- End of content body -->

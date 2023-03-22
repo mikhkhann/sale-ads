@@ -1,0 +1,42 @@
+@use "bootstrap"
+
+@use "mixins"
+
+.widget
+  @extend .form-control
+  margin: 0
+
+.flag-widget
+  @extend .form-check-input
+  margin: 0
+
+.flag-widget-invalid
+  @extend .is-invalid
+  margin: 0
+
+.flag-widget-label
+  @extend .form-check-label
+  @include mixins.whitespace-preserve
+  margin: 0
+  min-width: 0
+  overflow-wrap: break-word
+
+.flag-widget-block
+  @extend .form-check
+  align-items: center
+  display: grid
+  grid-auto-flow: column
+  margin: 0
+  max-width: max-content
+
+.flag-widget-list
+  display: grid
+  gap: 0.125rem
+
+.select
+  @extend .form-select
+  margin: 0
+
+.widget-invalid
+  @extend .is-invalid
+  margin: 0

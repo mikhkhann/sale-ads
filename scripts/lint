@@ -1,0 +1,4 @@
+cd ..
+python3.11 -m isort src --extend-skip-glob "/src/sale_ads/apps/*/migrations/*" -q
+python3.11 -m black src --extend-exclude ^/src/sale_ads/apps/[a-z0-9_]*/migrations/ -q
+python3.11 -m flake8 src --extend-exclude "./src/sale_ads/apps/*/migrations"

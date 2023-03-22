@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Third Party Account Login Failure" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Third Party Account Login Failure" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+
+  <!-- Message -->
+  <div
+    class="mx-auto page-content-medium text-break text-center whitespace-preserve"
+  >{% translate "An error occurred while attempting to login via your third party account." %}</div>
+
+{% endblock %} <!-- End of content body -->

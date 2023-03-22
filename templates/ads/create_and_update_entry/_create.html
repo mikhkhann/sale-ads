@@ -1,0 +1,12 @@
+{% extends "ads/create_and_update_entry/_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Add Ad Entry" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading_content %}{% translate "Add Ad Entry" context "web page heading" %}{% endblock %}
+
+<!-- Submission button text -->
+{% block button_text %}{% translate "Add" context "ad entry creation form button" %}{% endblock %}

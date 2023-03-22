@@ -1,0 +1,159 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{{ entry.name }}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium">{{ entry.name }}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+  <div class="d-grid gap-2 mx-auto page-content-medium">
+
+    <!-- Management buttons -->
+    {% if object.author_id == user.pk %}
+      <div class="d-grid gap-1" style="grid-template-columns: 1fr 1fr">
+
+        <!-- Update button -->
+        <a
+          class="btn btn-primary text-break whitespace-preserve"
+          href="{% url 'ads_update' pk=object.pk %}"
+          role="button"
+        >{% translate "Edit" context "link in ad details" %}</a>
+
+        <!-- Deletion button -->
+        <a
+          class="btn btn-danger text-break whitespace-preserve"
+          href="{% url 'ads_delete' pk=object.pk %}"
+          role="button"
+        >{% translate "Remove" context "link in ad details" %}</a>
+
+      </div>
+    {% endif %} <!-- End of management buttons -->
+
+    <!-- Fields -->
+    <div class="d-grid gap-1">
+
+      <!-- Language block -->
+      <div
+        class="align-items-center d-grid gap-1 grid-auto-flow-column mw-max-content"
+      >
+
+        <!-- Label -->
+        {% translate "Language:" context "ad details field label" as language_field_label %}
+        {% field_label language_field_label label_extra_class="min-width-0" required_mark=False %}
+
+        <!-- Form -->
+        <div>
+          <form action="{{ request.get_full_path }}" method="get">
+            <div class="d-grid gap-1 grid-auto-flow-column">
+
+              <!-- Field -->
+              {% select_field entry_choice_form.language %}
+
+              <!-- Button -->
+              <button class="btn btn-primary text-break whitespace-preserve"
+              >{% translate "Show" context 'ad detail page "show in other language" button' %}</button>
+
+            </div>
+          </form>
+        </div> <!-- End of form -->
+
+      </div> <!-- End of language block -->
+
+      <!-- Category field -->
+      <div class="d-grid gap-1 grid-auto-flow-column mw-max-content"
+      >
+
+        <!-- Label -->
+        {% translate "Category:" context "ad details field label" as category_field_label %}
+        {% field_label category_field_label label_extra_class="min-width-0" required_mark=False %}
+
+        <!-- Value -->
+        <a
+          class="text-break whitespace-preserve"
+          href="{{ object.category.get_absolute_url }}"
+        >{{ object.category }}</a>
+
+      </div> <!-- End of category field -->
+
+      <!-- Date field -->
+      <div class="d-grid gap-1 grid-auto-flow-column mw-max-content">
+
+        <!-- Label -->
+        {% translate "Created:" context "ad details field label" as creation_date_and_time_field_label %}
+        {% field_label creation_date_and_time_field_label label_extra_class="min-width-0" required_mark=False %}
+
+        <!-- Value -->
+        <div class="text-break whitespace-preserve"
+        >{{ object.created|date }}</div>
+
+      </div> <!-- End of date field -->
+
+      <!-- Author field -->
+      <div class="d-grid gap-1 grid-auto-flow-column mw-max-content">
+
+        <!-- Label -->
+        {% translate "Seller:" context "ad details field label" as seller_field_label %}
+        {% field_label seller_field_label label_extra_class="min-width-0" required_mark=False %}
+
+        <!-- Value -->
+        <a
+          class="text-break whitespace-preserve"
+          href="{{ object.author.get_absolute_url }}"
+        >{{ object.author }}</a>
+
+      </div> <!-- End of author field -->
+
+      <!-- Price field -->
+      <div class="d-grid gap-1 grid-auto-flow-column mw-max-content">
+
+        <!-- Label -->
+        {% translate "Price:" context "ad details field label" as price_field_label %}
+        {% field_label price_field_label label_extra_class="min-width-0" required_mark=False %}
+
+        <!-- Value -->
+        <div class="text-break whitespace-preserve">${{ object.price }}</div>
+
+      </div> <!-- End of price field -->
+
+      <!-- Verification field -->
+      {% if object.author_id == user.pk %}
+        <div class="d-grid gap-1 grid-auto-flow-column mw-max-content">
+
+          <!-- Label -->
+          {% translate "Verified:" context "ad details field label" as verification_field_label %}
+          {% field_label verification_field_label label_extra_class="min-width-0" required_mark=False %}
+
+          <!-- Value -->
+          <div class="text-break whitespace-preserve"
+          >{% if object.verified %}{% translate "Yes" context "ad details verification field value" %}{% else %}{% translate "No" context "ad details verification field value" %}{% endif %}</div>
+
+        </div>
+      {% endif %} <!-- End of verification field -->
+
+      <!-- Description -->
+      <div class="text-break whitespace-preserve">{{ entry.description }}</div>
+
+      <!-- Images -->
+      {% if object.images.exists %}
+        <div class="align-items-center d-flex flex-wrap gap-1">
+          {% for image in object.ordered_images %}
+
+            <!-- Image -->
+            <img style="max-width: 45%" src="{{ image.image.url }}">
+
+          {% endfor %}
+        </div>
+      {% endif %} <!-- End of images -->
+
+    </div> <!-- End of fields -->
+
+  </div>
+{% endblock %} <!-- End of content body -->

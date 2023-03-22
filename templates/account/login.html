@@ -1,0 +1,72 @@
+{% extends "_base.html" %}
+
+{% load i18n %}
+
+{% load htmlforms %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{% translate "Sign In" context "web page title prefix" %}{% endblock %}
+
+<!-- Content heading -->
+{% block content_heading %}
+  <div class="heading-page-top page-content-medium"
+  >{% translate "Sign In" context "web page heading" %}</div>
+{% endblock %}
+
+<!-- Content body -->
+{% block content_body %}
+
+  <!-- Form -->
+  <div class="mx-auto page-content-very-narrow">
+    <form action="{% url 'account_login' %}" method="post">
+      <div class="d-grid gap-1">
+
+        <!-- Errors -->
+        {% form_errors form %}
+
+        <!-- Fields & password reset link -->
+        <div>
+
+          <!-- Fields -->
+          <div class="d-grid gap-1">
+
+            <!-- Login field -->
+            {% translate "Username or E-mail" context "login form field label" as login_field_label %}
+            {% text_field form.login login_field_label autocomplete="email" %}
+
+            <!-- Password field -->
+            {% translate "Password" context "login form field label" as password_field_label %}
+            {% password_field form.password password_field_label autocomplete="current-password" %}
+
+            <!-- Remembering field -->
+            {% translate "Remember Me" context 'login form field label' as remembering_field_label %}
+            {% boolean_field form.remember choice_label=remembering_field_label %}
+
+          </div> <!-- End of fields -->
+
+          <!-- Password reset link -->
+          <a
+            class="text-break whitespace-preserve"
+            href="{% url 'account_reset_password' %}"
+          >{% translate "Forgot Password?" context "link in login form" %}</a>
+
+        </div> <!-- End of fields & password reset link -->
+
+        <!-- Button -->
+        <button class="btn btn-primary text-break whitespace-preserve"
+        >{% translate "Sign In" context "login form button" %}</button>
+
+      </div>
+      {% csrf_token %}
+      {% hidden_fields form %}
+      {% if redirect_field_value %}
+        <input
+          name="{{ redirect_field_name }}"
+          type="hidden"
+          value="{{ redirect_field_value }}"
+        >
+      {% endif %}
+    </form>
+  </div> <!-- End of form -->
+
+{% endblock %} <!-- End of content body -->

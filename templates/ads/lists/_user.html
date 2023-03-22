@@ -1,0 +1,45 @@
+{% extends "ads/lists/_base.html" %}
+
+{% load i18n %}
+
+<!-- Title prefix -->
+{% block title_prefix %}{{ viewed_user }}{% endblock %}
+
+<!-- Sub top bar -->
+{% block sub_top_bar %}
+  <div
+    class="background-color-secondary d-flex gap-2 grid-auto-flow-column p-2 shadow"
+  >
+
+    <!-- User photo -->
+    {% if viewed_user.photo %}
+      <a class="align-self-center" href="{{ viewed_user.get_absolute_url }}">
+        <img
+          style="max-height: 6rem; max-width: 6rem;"
+          src="{{ viewed_user.photo.url }}"
+        >
+      </a>
+    {% endif %}
+
+    <!-- User name -->
+    <a
+      class="align-self-center fs-2 link-text text-break whitespace-preserve"
+      href="{{ viewed_user.get_absolute_url }}"
+    >{{ viewed_user }}</a>
+
+  </div>
+{% endblock %} <!-- End of sub top bar -->
+
+<!-- List head -->
+{% block list_head %}
+
+  <!-- Ad creation link -->
+  {% if user == viewed_user %}
+    <a
+      class="btn btn-primary fs-2 text-break whitespace-preserve"
+      href="{% url 'ads_create' %}"
+      role="button"
+    >{% translate "Create Ad" context "link in user ad list" %}</a>
+  {% endif %}
+
+{% endblock %} <!-- End of list head -->

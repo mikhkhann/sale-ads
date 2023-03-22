@@ -1,0 +1,25 @@
+@use "vars" as vars
+
+@use "bootstrap/bootstrap" with ($primary: vars.$color-primary)
+
+$button-border-width: 0.125rem
+$button-border-color: #f5aede
+
+.btn-primary
+  border-color: $button-border-color
+  border-width: $button-border-width
+
+  &:hover
+    border-color: $button-border-color
+    background-color: #f3bde2
+
+.btn-outline-primary
+  border-color: $button-border-color
+  border-width: $button-border-width
+  color: black
+
+  &:disabled
+    color: black
+
+  &:hover
+    border-color: $button-border-color

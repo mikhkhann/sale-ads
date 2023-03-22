@@ -1,0 +1,12 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+build:
+  docker:
+    web: Dockerfile
+release:
+  image: web
+  command:
+    - django-admin collectstatic --noinput
+run:
+  web: gunicorn sale_ads.conf.wsgi
